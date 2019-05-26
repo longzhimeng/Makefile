@@ -4,7 +4,6 @@ obj=main.o print.o
 #print the obj value
 $(warning albert $(obj))
 
-
 main: $(obj)
 	@echo "albert:$(obj)"
 	$(CC) -o main $(obj) 
@@ -15,7 +14,6 @@ main.o: main.c
 print.o: print.c
 	$(CC) -c print.c 
 
-
 # .PHONY: clean 
 # clean:
 	# -rm -rf *.o main
@@ -23,4 +21,3 @@ print.o: print.c
 clean: FORCE
 	rm -rf *.o main
 FORCE:
-	
