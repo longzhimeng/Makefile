@@ -1,32 +1,44 @@
 #get cacu bin file
 cc  = gcc
 VPATH =	src include
-CPPFLAGS = -I include
-obj = add_int.o add_float.o sub_int.o sub_float.o main.o
+INCLUDES = -I include
+COMPILE.C = $(cc) $(INCLUDES) -c $<  -ggdb
 
-cacu: $(obj)
+TARGET = cacu
+
+SRCS = \
+	add_int.c \
+	add_float.c \
+	sub_int.c \
+	sub_float.c \
+	main.c 
+
+OBJS = $(addsuffix .o, $(basename $(SRCS)))
+
+$(TARGET): $(OBJS)
 	$(cc) $^ -o $@ -ggdb
 
 #get add_int.o target
 add_int.o: add_int.c add.h
-	$(cc) $(CPPFLAGS) -c $<  -ggdb
+	$(COMPILE.C)
 
 #get add_float.o target
 add_float.o: add_float.c add.h
-	$(cc) $(CPPFLAGS) -c $<  -ggdb
+	$(COMPILE.C)
 
 #get sub_int.o target
 sub_int.o: sub_int.c sub.h
-	$(cc) $(CPPFLAGS) -c $<  -ggdb
+	$(COMPILE.C)
 
 #get sub_float.o target
 sub_float.o: sub_float.c sub.h
-	$(cc) $(CPPFLAGS) -c $<  -ggdb
+	$(COMPILE.C)
 
 #get main.o target
 main.o:main.c add.h sub.h
-	$(cc) $(CPPFLAGS) -c $<  -ggdb
+	$(COMPILE.C)
 
 #clean project
+.PHONY: clean
 clean:
-	rm -f cacu *.o
+	rm -f $(TARGET) $(OBJS)
