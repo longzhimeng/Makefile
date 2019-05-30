@@ -1,8 +1,8 @@
 #get cacu bin file
-cc  = gcc
+CC  = gcc
 VPATH =	src include
-INCLUDES = -I include
-COMPILE.C = $(cc) $(INCLUDES) -c $<  -ggdb
+CPPFLAGS = -I include
+COMPILE.C = $(CC) $(CPPFLAGS) -c $<  -ggdb
 
 TARGET = cacu
 
@@ -16,7 +16,7 @@ SRCS = \
 OBJS = $(addsuffix .o, $(basename $(SRCS)))
 
 $(TARGET): $(OBJS)
-	$(cc) $^ -o $@ -ggdb
+	$(CC) $^ -o $@ -ggdb
 
 #get add_int.o target
 add_int.o: add_int.c add.h
@@ -38,7 +38,17 @@ sub_float.o: sub_float.c sub.h
 main.o:main.c add.h sub.h
 	$(COMPILE.C)
 
+#----------automatic dependency generaton beging -------------
+include $(subst .c,.d,$(SRCS))
+
+%.d: %.c
+	$(CC) -M $(CPPFLAGS) $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	$(RM) $@.$$$$
+#----------automatic dependency generaton end -------------
+
+
 #clean project
 .PHONY: clean
 clean:
-	rm -f $(TARGET) $(OBJS)
+	$(RM) $(TARGET) $(OBJS) *.d
