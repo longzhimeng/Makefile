@@ -1,19 +1,22 @@
 #get cacu bin file
-CC  = gcc
-VPATH =	src include
-CPPFLAGS = -I include
-COMPILE.C = $(CC) $(CPPFLAGS) -c $<  -ggdb
+CC  := gcc
+VPATH := src include
+CPPFLAGS := -I include
 
-TARGET = cacu
+#COMPILE.C is the recursively expanded variable
+#COMPILE.C := $(CC) $(CPPFLAGS) -c $< -ggdb  #error 
+COMPILE.C = $(CC) $(CPPFLAGS) -c $< -ggdb
 
-SRCS = \
+TARGET := cacu
+
+SRCS := \
 	add_int.c \
 	add_float.c \
 	sub_int.c \
 	sub_float.c \
 	main.c 
 
-OBJS = $(addsuffix .o, $(basename $(SRCS)))
+OBJS := $(addsuffix .o, $(basename $(SRCS)))
 
 $(TARGET): $(OBJS)
 	$(CC) $^ -o $@ -ggdb
@@ -35,7 +38,7 @@ sub_float.o: sub_float.c sub.h
 	$(COMPILE.C)
 
 #get main.o target
-main.o:main.c add.h sub.h
+main.o: main.c add.h sub.h
 	$(COMPILE.C)
 
 #----------automatic dependency generaton beging -------------
